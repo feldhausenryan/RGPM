@@ -163,7 +163,7 @@ public class Main extends ListenerAdapter
         		break;
     		}
     	}
-    	
+
     	// Return if the guild or channel is invalid. We don't want to crash. Just wait until the owner directs the bot to the 
     	// correct server. Ignore bot messages.
     	if (DISCORD_TARGET_GUILD == null || DISCORD_TARGET_CHANNEL == null || author.isBot()) return;

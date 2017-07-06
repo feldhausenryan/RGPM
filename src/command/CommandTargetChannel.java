@@ -31,12 +31,12 @@ public class CommandTargetChannel extends Command {
      */
 	@Override
 	public void execute() {
-    	DISCORD_TARGET_GUILD = guild;
-    	DISCORD_TARGET_CHANNEL = channel;
-    	Main.settingsDatabase.put(Main.STRING_DISCORD_TARGET_GUILD_ID, DISCORD_TARGET_GUILD.getId());
-    	Main.settingsDatabase.put(Main.STRING_DISCORD_TARGET_CHANNEL_ID, DISCORD_TARGET_CHANNEL.getId());
-    	DISCORD_TARGET_CHANNEL.sendMessageFormat("RGPM Directed to %s, %s",
-    			DISCORD_TARGET_GUILD.getName(), DISCORD_TARGET_CHANNEL.getName());
+    	Main.DISCORD_TARGET_GUILD = guild;
+    	Main.DISCORD_TARGET_CHANNEL = channel;
+    	Main.settingsDatabase.put(Main.STRING_DISCORD_TARGET_GUILD_ID, Main.DISCORD_TARGET_GUILD.getId());
+    	Main.settingsDatabase.put(Main.STRING_DISCORD_TARGET_CHANNEL_ID, Main.DISCORD_TARGET_CHANNEL.getId());
+    	Main.DISCORD_TARGET_CHANNEL.sendMessageFormat("RGPM Directed to %s, %s",
+    			Main.DISCORD_TARGET_GUILD.getName(), Main.DISCORD_TARGET_CHANNEL.getName()).queue();
     }
 
 }
