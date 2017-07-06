@@ -2,7 +2,6 @@ package mainpackage;
 import java.util.ArrayList;
 import java.util.List;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 import structures.AuthorityEnum;
 import structures.MatchResult;
@@ -10,6 +9,11 @@ import structures.MatchResultStatusEnum;
 import structures.Player;
 import structures.WinningTeam;
 
+/**
+ * Match contains code relevant to handling matches. This includes rating changes. Win/loss storage. Matchmaking. 
+ * @author feldh
+ *
+ */
 public class Match {
 	List<QueuedPlayer> queue;
 	ArrayList<Player> matchPlayers;

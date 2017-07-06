@@ -5,6 +5,10 @@ import mainpackage.Main;
 
 public class Player implements Serializable{
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * id is a unique player identifier created by discord.
 	 * It is typically a large string of numbers. It could be represented
 	 * by a numeric format, but is formatted as a string to prevent 

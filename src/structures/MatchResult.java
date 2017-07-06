@@ -5,6 +5,10 @@ import java.util.Date;
 
 public class MatchResult implements Serializable{
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * An array list containing the members of the red team. 
 	 */
 	private final ArrayList<Player> redTeam;

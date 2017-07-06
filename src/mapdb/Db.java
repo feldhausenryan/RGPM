@@ -21,6 +21,7 @@ public class Db {
 	/**
 	 * The specific map used by this class. 
 	 */
+	@SuppressWarnings("rawtypes")
 	private ConcurrentMap data;
 	/**
 	 * An instance of ReentrantLock created OUTSIDE of the class. The
