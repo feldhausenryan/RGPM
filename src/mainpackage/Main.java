@@ -84,13 +84,13 @@ public class Main extends ListenerAdapter
             
             // Grab the guild and channel ID from the database. It is stored this way so it can be changed
             // through commands in discord. Grab the admin identifier. 
-            String discordTargetGuildId   = (String) settingsDatabase.getOrDefault(STRING_DISCORD_TARGET_GUILD_ID, "");
-            String discordTargetChannelId = (String) settingsDatabase.getOrDefault(STRING_DISCORD_TARGET_CHANNEL_ID, "");
+            String discordTargetGuildId   = (String) settingsDatabase.getOrDefault(STRING_DISCORD_TARGET_GUILD_ID, "1");
+            String discordTargetChannelId = (String) settingsDatabase.getOrDefault(STRING_DISCORD_TARGET_CHANNEL_ID, "1");
             DISCORD_ADMIN_IDENTIFIER      = (String) settingsDatabase.getOrDefault(STRING_DISCORD_ADMIN_IDENTIFIER, "@admin");
             
             // These might be null. Have to add checks in later in the process of getting messages to make sure 
             // These don't cause any problems. 
-            DISCORD_TARGET_GUILD = jda.getGuildById(discordTargetGuildId);
+            DISCORD_TARGET_GUILD   = jda.getGuildById(discordTargetGuildId);
             DISCORD_TARGET_CHANNEL = DISCORD_TARGET_GUILD.getTextChannelById(discordTargetChannelId);
             
             // Every 10s look through the queue and remove inactive / idle players. 
