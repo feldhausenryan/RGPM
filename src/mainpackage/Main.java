@@ -91,7 +91,8 @@ public class Main extends ListenerAdapter
             // These might be null. Have to add checks in later in the process of getting messages to make sure 
             // These don't cause any problems. 
             DISCORD_TARGET_GUILD   = jda.getGuildById(discordTargetGuildId);
-            DISCORD_TARGET_CHANNEL = DISCORD_TARGET_GUILD.getTextChannelById(discordTargetChannelId);
+            if (DISCORD_TARGET_GUILD == null) DISCORD_TARGET_CHANNEL = null;
+            else DISCORD_TARGET_CHANNEL = DISCORD_TARGET_GUILD.getTextChannelById(discordTargetChannelId);
             
             // Every 10s look through the queue and remove inactive / idle players. 
             initiateQueueCleaning();
