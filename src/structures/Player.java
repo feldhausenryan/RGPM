@@ -3,6 +3,11 @@ import java.io.Serializable;
 
 import mainpackage.Main;
 
+/**
+ * Player provides information about a speficic player in a Serializable format to be saved into the MapDB database. 
+ * @author feldh
+ *
+ */
 public class Player implements Serializable{
 	/**
 	 * 

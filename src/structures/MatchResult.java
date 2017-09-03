@@ -3,6 +3,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * MatchResult provides all data relevant to a specific match in a Serializable class which is saved into the
+ * MapDB database. 
+ * @author feldh
+ *
+ */
 public class MatchResult implements Serializable{
 	/**
 	 * 

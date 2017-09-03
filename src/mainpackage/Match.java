@@ -91,12 +91,23 @@ public class Match {
 				bestBlue.get(4).getId(), bestBlue.get(4).getU(), probABeatsB*100., matchId, matchId).queue();
 	}
 	
+	/**
+	 * This function determines the probability that team A will beat team B as a double.
+	 * The skill of a player is a normal distribution centered at u and with variance sigma. 
+	 * The sum of the normal distributions of all players on a team will give the skill of that team.
+	 * When the distributions for team A and B are compared, there is a probability that a random value chosen
+	 * from the normal distribution of team A (i.e. their skill this game) will be greater than a random value
+	 * chosen from the normal distribution of team B. This is given by the Culm Normal Distribution Function.
+	 * @param A Array of players on team A
+	 * @param B Array of players on team B
+	 * @return Double representing the probability that A beats B in a match.
+	 */
 	public double probTeamABeatsTeamB(ArrayList<Player> A, ArrayList<Player> B){
 		double uA = 0;
 		double uB = 0;
 		double sigmaA = 0;
 		double sigmaB = 0;
-		
+	
 		for(Player p: A){
 			uA += p.getU();
 			sigmaA += p.getSigma();
@@ -161,7 +172,13 @@ public class Match {
 	    return (1d - neg) * y + neg * (1d - y);
 	}
 	
-
+	/**
+	 * This function checks the roles of a Guild Member and compares it to the identified Admin role identifier.
+	 * The function also checks the Guild Member to see if they are the owner of the bot. 
+	 * @param user The user to check the authority of
+	 * @param guild The guild that the user is in 
+	 * @return An enumerator representing the authority OWNER/ADMIN/NORMAL of the member. 
+	 */
 	public static AuthorityEnum getUserAuthority(User user, Guild guild){
 		// The owner is the person defined in the constants in Main. In other words, its who is reading this ;)
 		if (user.getName().equals(Main.DISCORD_BOT_OWNER_PREFIX) && 
@@ -178,9 +195,9 @@ public class Match {
 	
 	/**
 	 * Compares two authorities. Checks to see if newAuthority is greater than oldAuthority.
-	 * @param newAuthority
-	 * @param oldAuthority
-	 * @return
+	 * @param newAuthority AuthorityEnum
+	 * @param oldAuthority AuthorityEnum
+	 * @return if newAuthority > oldAuthority
 	 */
 	public static boolean greaterAuthority(AuthorityEnum newAuthority, AuthorityEnum oldAuthority){
 		switch(oldAuthority){
@@ -200,7 +217,17 @@ public class Match {
 		return false;
 	}
 	
-	
+	/**
+	 * Takes information from a match and adjusts the player ratings. It then saves all this data into various databases for 
+	 * lookup later on. the rating change is based on the expected win rate, and k. This can be best described via example. 
+	 * "If team A is expected to win 75% of the time and they do win 75% of the time, their ratings shouldn't change."
+	 * Therefore when team A wins they should gain 1/3rd the points they do if they lose.  
+	 * @param matchID The database ID of the match to save. 
+	 * @param winner The team which won the match.
+	 * @param match The record of the match. This is changed and the new version overwrites the old matchID.
+	 * @param recordingStatus An enumerator specifying if the match was unrecorded/contested/etc.
+	 * @return The new MatchResult record. 
+	 */
 	private static MatchResult recordMatchResult(int matchID, WinningTeam winner, MatchResult match, MatchResultStatusEnum recordingStatus){
 		int redChange  = 0;
 		int blueChange = 0;
@@ -208,12 +235,12 @@ public class Match {
 		
 		switch(winner){
 		case REDTEAM:
-			redChange  = Main.K_VALUE;
-			blueChange = -1*((int) (((1.0 - odds) / odds) * Main.K_VALUE));
+			redChange  = (int) (Main.K_VALUE * (1.0 - odds));
+			blueChange = -1 * (int) (Main.K_VALUE * (1.0 - odds));
 			break;
 		case BLUETEAM:
-			redChange  = -1*((int) ((odds / (1.0 - odds)) * Main.K_VALUE));
-			blueChange = Main.K_VALUE;
+			redChange  = -1 * (int) (Main.K_VALUE * (odds));
+			blueChange = (int) (Main.K_VALUE * (odds));
 			break;
 		case UNKNOWN:
 			break;
@@ -236,6 +263,12 @@ public class Match {
 		return matchFinal;
 	}
 	
+	/**
+	 * In the case of a contested match, the affect on player ratings needs to be reverted. 
+	 * @param matchID The ID of the match which is being reverted. 
+	 * @param match The match represented by matchID. Should match a call to matchDatabase.get(matchID)
+	 * @return A new match saved into matchID's spot in the database
+	 */
 	private static MatchResult revertRatingChange(int matchID, MatchResult match){
 		int revertedRedOffset  = -match.getRedChange();
 		int revertedBlueOffset = -match.getBlueChange();
@@ -257,6 +290,15 @@ public class Match {
 		return matchFinal;
 	}
 	
+	/**
+	 * Sets the winner of the match. If one team contests the match results, this function sorts out whose calls should
+	 * override others.
+	 * @param matchID int Stating what the MapDB ID of the match is
+	 * @param winner An enumerator determining which team won
+	 * @param user The author of the command, used to determine the authority level of this call. 
+	 * @return True 
+	 * @throws Exception Throws an exception with an error message that should be printed to the chat channel.
+	 */
 	public static boolean setMatchResult(int matchID, WinningTeam winner, User user) throws Exception{
 		if(Main.matchDatabase.containsKey(matchID)){
 			MatchResult match = (MatchResult) Main.matchDatabase.get(matchID);

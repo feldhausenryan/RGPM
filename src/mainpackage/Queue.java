@@ -4,14 +4,28 @@ import java.util.Iterator;
 
 import net.dv8tion.jda.core.entities.*;
 
+/**
+ * This class handles a queue of players and has functions to start a match when 10 players are found,
+ * remove players who have disconnected, broadcast status, and more. 
+ * @author feldh
+ */
 public class Queue {
 	private ArrayList<QueuedPlayer> queue;
-	
+	 
+	/**
+	 * Initiates a new empty queue
+	 */
 	public Queue(){
 		queue = new ArrayList<QueuedPlayer>();
 	}
 
-	public boolean addPlayerToQueue(QueuedPlayer player){
+	/**
+	 * Adds a player to the queue and checks if they are already in the queue.
+	 * If they are in the queue, update the time rather than replace them. 
+	 * @param player QueuedPlayer to add to the queue. 
+	 * @return True if the player was added to the queue. False if only the time was updated. 
+	 */
+	boolean addPlayerToQueue(QueuedPlayer player){
 		for(QueuedPlayer queuedPlayer : queue){
 			if(queuedPlayer.getUser().getId().equals(player.getUser().getId())){
 				queuedPlayer.setQueueTime(player.getQueueTime());
@@ -23,6 +37,11 @@ public class Queue {
 		return true;
 	}
 	
+	/**
+	 * Remove a player from the queue and return true if the player was successfully found and removed. 
+	 * @param user User to remove from the queue.
+	 * @return true if the player was removed from the queue. false if they couldn't be found. 
+	 */
 	public boolean removePlayerFromQueue(User user){
 		for(QueuedPlayer queuedPlayer : queue){
 			if(queuedPlayer.getUser().getId().equals(user.getId())){
@@ -37,6 +56,11 @@ public class Queue {
 		return queue.size();
 	}
 	
+	/**
+	 * Checks to see if any players have been in queue for longer than they subscribed to. 
+	 * Also checks to see if any players have become disconnected / DND/ etc.
+	 * Removes players from the queue based on these conditions. 
+	 */
 	public void cleanQueue(){
 		Iterator<QueuedPlayer> itr = queue.iterator();
 		while(itr.hasNext()){
@@ -80,6 +104,9 @@ public class Queue {
 		}
 	}
 	
+	/**
+	 * States who is in queue, how long they are in queue, and how many players total are in queue. 
+	 */
 	public void broadcastStatus(){
 		cleanQueue();
 		for(QueuedPlayer player : queue){
@@ -107,6 +134,10 @@ public class Queue {
 		}
 	}
 	
+	/**
+	 * Checks to see if there are more than 10 players in the queue. 
+	 * If this condition is met, a new match is created. 
+	 */
 	public void checkCount(){
 		if(queue.size() >= 10){
 			new Match(queue.subList(0, 10));

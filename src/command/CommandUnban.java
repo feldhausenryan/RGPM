@@ -17,7 +17,7 @@ import structures.AuthorityEnum;
  */
 public class CommandUnban extends Command {
 	/**
-	 * Constructs a CommandQueue instance. Takes one additional paramter over the abstract class. 
+	 * Constructs a CommandQueue instance.
 	 * @param event The discord event. Used in the abstract and contains the JDA-provided discord information. 
 	 * @param DISCORD_TARGET_CHANNEL The channel to talk in 
 	 * @param DISCORD_TARGET_GUILD The guild to talk in

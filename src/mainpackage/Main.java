@@ -34,34 +34,110 @@ import static java.util.concurrent.TimeUnit.*;
 
 public class Main extends ListenerAdapter
 {
+	/**
+	 * This is the average rating that a new player will start at. 
+	 */
 	public static final int STARTING_U = 1500;
+	/**
+	 * This is the variation that a new player will start at.  
+	 */
 	public static final int STARTING_SIGMA = 100;
+	/**
+	 * K is a constant used partially to determine the magnitude in the change of a player's rating after a match. 
+	 */
 	public static final int K_VALUE = 50;
+	/**
+	 * The bot will check the player queue and will clear disconnected players at this interval. 
+	 */
 	public static final int CLEAN_QUEUE_INTERVAL_SECONDS = 10;
+	/**
+	 * The bot will save the database at this interval. Note that the database will not be corrupted through a loss of power.
+	 * Everything not saved will be lost. Saving after every query is unreasonable. A periodic task works well. 
+	 */
 	public static final int SAVE_DATABASE_INTERVAL_SECONDS = 60;
+	/**
+	 * This is a token provided when creating the bot through Discord. This should not be in the source and will be removed from it
+	 * at a later date.
+	 */
 	public static final String DISCORD_BOT_TOKEN = "MzE3NTE2NTI4OTc3NDQ0ODY2.DAlMbw.BqZN-e-Tiwo0dDKIhLEHRmnKTvo";
+	/**
+	 * The Discord bot owner's name. 
+	 */
 	public static final String DISCORD_BOT_OWNER_PREFIX = "Ryan";
+	/**
+	 * The Discord bot owner's unique tag. 
+	 */
 	public static final String DISCORD_BOT_OWNER_SUFFIX = "9411";
-	
+	/**
+	 * The name of the MapDB database. This could be anything. 
+	 */
 	private static final String DB_NAME = "RGPM_DB";
+	/**
+	 * This variable relates a string MapDB parameter with a Java variable so accessing this parameter is simplified. 
+	 */
 	public static final String STRING_DISCORD_TARGET_GUILD_ID   = "DISCORD_TARGET_GUILD_ID";
+	/**
+	 * This variable relates a string MapDB parameter with a Java variable so accessing this parameter is simplified. 
+	 */
 	public static final String STRING_DISCORD_TARGET_CHANNEL_ID = "DISCORD_TARGET_CHANNEL_ID";
+	/**
+	 * This variable relates a string MapDB parameter with a Java variable so accessing this parameter is simplified. 
+	 */
 	public static final String STRING_DISCORD_ADMIN_IDENTIFIER  = "DISCORD_ADMIN_IDENTIFIER";
+	/**
+	 * A lock preventing simultaneous MapDB database modifications. 
+	 */
 	private static ReentrantLock lock = new ReentrantLock();
+	/**
+	 * A database containing settings for the bot. 
+	 */
 	public static Db settingsDatabase  = new Db(DB_NAME, "settingsDatabase", lock);
+	/**
+	 * A database containing records for individual players. See src/structures/Player.java
+	 */
 	public static Db playerDatabase    = new Db(DB_NAME, "playerDatabase", lock);
+	/**
+	 * A database containing records for individual matches. See src/structures/MatchResult.java
+	 */
 	public static Db matchDatabase     = new Db(DB_NAME, "matchDatabase", lock);
+	/**
+	 * A database containing a singular record which identifies the ID of the most recent match. 
+	 */
 	public static Db nextMatchDatabase = new Db(DB_NAME, "nextMatchDatabase", lock);
+	/**
+	 * A databse containing records for banned players. 
+	 */
 	public static Db banDatabase       = new Db(DB_NAME, "banDatabase", lock);
 	
+	/**
+	 * The queue of players who are waiting for a match. 
+	 */
 	private static Queue mainQueue = new Queue();
+	/**
+	 * The JDA API endpoint
+	 */
 	public static JDA jda;
 	
+	/**
+	 * The Guild which the Discord bot should run in (AKA the server)
+	 */
 	public static Guild          DISCORD_TARGET_GUILD;
+	/**
+	 * The chat channel which the Discord bot should run in. 
+	 */
 	public static MessageChannel DISCORD_TARGET_CHANNEL;
+	/**
+	 * The name of the user role which identifies an admin of the bot. This should be named after role in the Guild and set via command.  
+	 */
 	public static String         DISCORD_ADMIN_IDENTIFIER;
 	
+	/**
+	 * Part of the implementation for the periodic service which removes disconnected players from the queue. 
+	 */
     private final static ScheduledExecutorService queueCleanSchedule = Executors.newScheduledThreadPool(1);
+    /**
+     * Part of the implementation for the periodic service which saves the database. 
+     */
     private final static ScheduledExecutorService dbCommitSchedule   = Executors.newScheduledThreadPool(1);
 	
 	/**
@@ -178,7 +254,8 @@ public class Main extends ListenerAdapter
         		return;
         	}
     	}
-    	                                   		
+    	
+    	// Normal commands any user can access. See src/command. 
     	switch(msgPrefix){
     	case("!queue"):
     		new CommandQueue(   event, DISCORD_TARGET_CHANNEL, DISCORD_TARGET_GUILD, mainQueue).execute();
