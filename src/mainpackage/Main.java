@@ -59,15 +59,15 @@ public class Main extends ListenerAdapter
 	 * This is a token provided when creating the bot through Discord. This should not be in the source and will be removed from it
 	 * at a later date.
 	 */
-	public static final String DISCORD_BOT_TOKEN = "MzE3NTE2NTI4OTc3NDQ0ODY2.DAlMbw.BqZN-e-Tiwo0dDKIhLEHRmnKTvo";
+	public static final String DISCORD_BOT_TOKEN = "";
 	/**
 	 * The Discord bot owner's name. 
 	 */
-	public static final String DISCORD_BOT_OWNER_PREFIX = "Ryan";
+	public static final String DISCORD_BOT_OWNER_PREFIX = "";
 	/**
 	 * The Discord bot owner's unique tag. 
 	 */
-	public static final String DISCORD_BOT_OWNER_SUFFIX = "9411";
+	public static final String DISCORD_BOT_OWNER_SUFFIX = "";
 	/**
 	 * The name of the MapDB database. This could be anything. 
 	 */

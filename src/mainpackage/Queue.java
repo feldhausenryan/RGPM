@@ -25,7 +25,7 @@ public class Queue {
 	 * @param player QueuedPlayer to add to the queue. 
 	 * @return True if the player was added to the queue. False if only the time was updated. 
 	 */
-	boolean addPlayerToQueue(QueuedPlayer player){
+	public boolean addPlayerToQueue(QueuedPlayer player){
 		for(QueuedPlayer queuedPlayer : queue){
 			if(queuedPlayer.getUser().getId().equals(player.getUser().getId())){
 				queuedPlayer.setQueueTime(player.getQueueTime());
